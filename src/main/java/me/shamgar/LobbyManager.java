@@ -440,6 +440,8 @@ public class LobbyManager implements Listener {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (gameRunning) {
                 player.setGameMode(GameMode.SPECTATOR);
+                // Record the loss for this player
+                plugin.addLoss(player.getUniqueId());
                 player.showTitle(Title.title(Component.text("§c§lYOU DIED"), Component.text("§7You are now spectating"), Title.Times.times(ticksToDuration(10), ticksToDuration(60), ticksToDuration(20))));
                 player.sendMessage(Component.text("§7You died and are now spectating. Wait for the game to end.").toString());
 

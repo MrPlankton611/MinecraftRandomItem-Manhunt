@@ -164,8 +164,15 @@ public class McManhunt extends JavaPlugin {
                 Objective obj = board.registerNewObjective("mh_leader", "dummy", Component.text(title));
                 obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 
+                // Build a combined set of all known player UUIDs (those with wins OR losses)
+                java.util.Set<UUID> allKnown = new java.util.HashSet<>(totalWins.keySet());
+                allKnown.addAll(totalLosses.keySet());
+
                 // Build a list of players sorted by total wins (descending)
-                List<Map.Entry<UUID, Integer>> entries = new ArrayList<>(totalWins.entrySet());
+                List<Map.Entry<UUID, Integer>> entries = new ArrayList<>();
+                for (UUID id : allKnown) {
+                    entries.add(Map.entry(id, totalWins.getOrDefault(id, 0)));
+                }
                 entries.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
 
                 int shown = 0;
@@ -182,9 +189,9 @@ public class McManhunt extends JavaPlugin {
                     shown++;
                 }
 
-                // Also show online players that may not be in totals (show 0)
+                // Also show online players that may not be in totals at all (show 0)
                 for (org.bukkit.entity.Player p : Bukkit.getOnlinePlayers()) {
-                    if (!totalWins.containsKey(p.getUniqueId()) && !totalLosses.containsKey(p.getUniqueId())) {
+                    if (!allKnown.contains(p.getUniqueId())) {
                         if (shown >= 14) break;
                         String line = p.getName() + " §7(0w/0l)";
                         obj.getScore(line).setScore(0);
