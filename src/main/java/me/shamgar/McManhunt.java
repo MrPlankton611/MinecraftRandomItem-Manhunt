@@ -517,6 +517,8 @@ public class McManhunt extends JavaPlugin {
         for (UUID pid : new ArrayList<>(playerBoosts.keySet())) {
             clearPlayerBoost(pid);
         }
+        // Reset advancements for all players so each round starts fresh
+        resetAllAdvancements();
         lobbyManager.sendAllToLobby();
     }
 
@@ -838,6 +840,23 @@ public class McManhunt extends JavaPlugin {
         } catch (IOException e) {
             getLogger().severe("Failed to write used_pregen.txt: " + e.getMessage());
         }
+    }
+
+    /**
+     * Revoke all advancements for every online player so each round starts fresh.
+     */
+    public void resetAllAdvancements() {
+        for (org.bukkit.entity.Player p : Bukkit.getOnlinePlayers()) {
+            java.util.Iterator<org.bukkit.advancement.Advancement> it = Bukkit.advancementIterator();
+            while (it.hasNext()) {
+                org.bukkit.advancement.Advancement adv = it.next();
+                org.bukkit.advancement.AdvancementProgress progress = p.getAdvancementProgress(adv);
+                for (String criteria : progress.getAwardedCriteria()) {
+                    progress.revokeCriteria(criteria);
+                }
+            }
+        }
+        getLogger().info("Reset all advancements for all online players.");
     }
 
     private static Duration ticksToDuration(long ticks) {

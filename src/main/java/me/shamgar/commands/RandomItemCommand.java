@@ -91,6 +91,9 @@ public class RandomItemCommand implements CommandExecutor {
         plugin.getLobbyManager().setGameRunning(true);
         plugin.getLobbyManager().setGameSpawn(safeSpawn);
 
+        // Reset advancements for all players at game start
+        plugin.resetAllAdvancements();
+
         // Announce countdown
         String preMsg1 = "§6§l✦ Srikar Fuck you! ✦";
         String preMsg2 = "§eTeleporting to §b" + world.getName() + " §ein 5 seconds...";
