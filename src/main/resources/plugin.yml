@@ -1,0 +1,22 @@
+name: McManhuntPlus
+version: 1.0
+main: me.shamgar.McManhunt
+api-version: '1.21'
+commands:
+  manhunt:
+    description: Start the custom McManhunt mode
+  randomitem:
+    description: Start or stop random item drops for all players
+    usage: /randomitem [stop]
+  randomitemtimer:
+    description: Change the interval for random item drops
+    usage: /randomitemtimer <seconds>
+  mhdebug:
+    description: Show debug info (world, coords, gamemode)
+    usage: /mhdebug
+  track:
+    description: Track a player with compass + bossbar
+    usage: /track <player|stop>
+  boostitem:
+    description: Boost an item's probability by 5%
+    usage: /boostitem <MATERIAL>
