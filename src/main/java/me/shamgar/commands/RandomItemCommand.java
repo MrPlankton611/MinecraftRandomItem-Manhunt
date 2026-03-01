@@ -142,6 +142,7 @@ public class RandomItemCommand implements CommandExecutor {
                 player.setFoodLevel(20);
                 player.setSaturation(0f); // full hunger, no saturation = slow regen
                 player.getInventory().clear();
+                player.getEnderChest().clear();
                 player.showTitle(Title.title(Component.text("§a§lGO!"), Component.text("§7Random items every §b" + (plugin.getItemIntervalTicks() / 20) + "s"), Title.Times.times(Duration.ofMillis(0), Duration.ofMillis(40*50), Duration.ofMillis(20*50))));
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 0.5f, 1.5f);
             }

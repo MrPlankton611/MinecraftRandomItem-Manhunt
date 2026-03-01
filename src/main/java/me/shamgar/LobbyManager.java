@@ -406,6 +406,8 @@ public class LobbyManager implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.teleport(lobbySpawn);
             player.setGameMode(GameMode.ADVENTURE);
+            player.getInventory().clear();
+            player.getEnderChest().clear();
             player.showTitle(Title.title(Component.text("§6§lBack to Lobby"), Component.text("§7Game ended"), Title.Times.times(ticksToDuration(10), ticksToDuration(40), ticksToDuration(20))));
         }
     }
