@@ -156,6 +156,11 @@ public class RandomItemCommand implements CommandExecutor {
             String borderMsg = "§eWorld border set to §b1500x1500 §ecentered on spawn.";
             for (Player p : Bukkit.getOnlinePlayers()) p.sendMessage(Component.text(borderMsg));
 
+            // Lock the game world to always daytime
+            world.setTime(1000); // morning
+            world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+            for (Player p : Bukkit.getOnlinePlayers()) p.sendMessage(Component.text("§e☀ Time locked to daytime."));
+
             // Start scheduled border shrink in plugin (100 blocks per minute down to 500)
             plugin.startBorderShrink(world, safeSpawn.getX(), safeSpawn.getZ());
 

@@ -8,6 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
@@ -18,6 +20,49 @@ public class RandomItemTask extends BukkitRunnable {
 
     private final McManhunt plugin;
     private final Random random = new Random();
+
+    // Survival-useful potion types to randomly apply
+    private static final PotionType[] USEFUL_POTIONS = {
+            PotionType.FIRE_RESISTANCE,
+            PotionType.HARMING,
+            PotionType.HEALING,
+            PotionType.INVISIBILITY,
+            PotionType.LEAPING,
+            PotionType.LONG_FIRE_RESISTANCE,
+            PotionType.LONG_INVISIBILITY,
+            PotionType.LONG_LEAPING,
+            PotionType.LONG_NIGHT_VISION,
+            PotionType.LONG_POISON,
+            PotionType.LONG_REGENERATION,
+            PotionType.LONG_SLOWNESS,
+            PotionType.LONG_SLOW_FALLING,
+            PotionType.LONG_STRENGTH,
+            PotionType.LONG_SWIFTNESS,
+            PotionType.LONG_TURTLE_MASTER,
+            PotionType.LONG_WEAKNESS,
+            PotionType.NIGHT_VISION,
+            PotionType.POISON,
+            PotionType.REGENERATION,
+            PotionType.SLOWNESS,
+            PotionType.SLOW_FALLING,
+            PotionType.STRENGTH,
+            PotionType.STRONG_HARMING,
+            PotionType.STRONG_HEALING,
+            PotionType.STRONG_LEAPING,
+            PotionType.STRONG_POISON,
+            PotionType.STRONG_REGENERATION,
+            PotionType.STRONG_SLOWNESS,
+            PotionType.STRONG_STRENGTH,
+            PotionType.STRONG_SWIFTNESS,
+            PotionType.STRONG_TURTLE_MASTER,
+            PotionType.SWIFTNESS,
+            PotionType.TURTLE_MASTER,
+            PotionType.WEAKNESS,
+            PotionType.WIND_CHARGED,
+            PotionType.OOZING,
+            PotionType.INFESTED,
+            PotionType.WEAVING,
+    };
 
     public RandomItemTask(McManhunt plugin) {
         this.plugin = plugin;
@@ -57,17 +102,38 @@ public class RandomItemTask extends BukkitRunnable {
             Material mat = weightedPick();
             if (mat == null) continue;
 
-            // Determine max stack size for this material
-            int maxStack = new ItemStack(mat).getMaxStackSize();
+            // Determine quantity based on item type
+            int giveAmount;
+            int dropAmount;
+            int drops = 7;
+            if (mat == Material.ENCHANTED_GOLDEN_APPLE) {
+                giveAmount = 1;
+                dropAmount = 1;
+            } else if (mat == Material.GOLDEN_APPLE) {
+                giveAmount = 16;
+                dropAmount = 16;
+            } else {
+                int maxStack = new ItemStack(mat).getMaxStackSize();
+                giveAmount = Math.max(1, maxStack);
+                dropAmount = Math.max(1, maxStack);
+            }
 
-            // Give the player one full stack (or 1 if unstackable)
-            int giveAmount = Math.max(1, Math.min(maxStack, maxStack));
+            // Build the item stack (apply potion effect if it's a potion type)
             ItemStack give = new ItemStack(mat, giveAmount);
+            boolean isPotion = (mat == Material.POTION || mat == Material.SPLASH_POTION || mat == Material.LINGERING_POTION);
+            PotionType chosenPotion = null;
+            if (isPotion) {
+                chosenPotion = USEFUL_POTIONS[random.nextInt(USEFUL_POTIONS.length)];
+                PotionMeta pm = (PotionMeta) give.getItemMeta();
+                pm.setBasePotionType(chosenPotion);
+                give.setItemMeta(pm);
+            }
+
             player.getInventory().addItem(give);
-            player.sendMessage("§a§lRandom Item! §r§7You received: §f" + formatName(mat.name()));
+            String itemName = isPotion ? formatName(mat.name()) + " (" + formatName(chosenPotion.name()) + ")" : formatName(mat.name());
+            player.sendMessage("§a§lRandom Item! §r§7You received: §f" + itemName);
 
             // Drop 7 stacks (or 7 singles for unstackable) around the player and protect them
-            int drops = 7;
             long protectMs = 0L; // 0 or negative => permanent protection (owner-only forever)
 
             Location base = player.getLocation();
@@ -76,11 +142,11 @@ public class RandomItemTask extends BukkitRunnable {
                 double oz = (random.nextDouble() - 0.5) * 4.0;
                 Location dropLoc = base.clone().add(ox, 0.5, oz);
 
-                ItemStack dropStack;
-                if (maxStack <= 1) {
-                    dropStack = new ItemStack(mat, 1);
-                } else {
-                    dropStack = new ItemStack(mat, maxStack);
+                ItemStack dropStack = new ItemStack(mat, dropAmount <= 1 ? 1 : dropAmount);
+                if (isPotion && chosenPotion != null) {
+                    PotionMeta dpm = (PotionMeta) dropStack.getItemMeta();
+                    dpm.setBasePotionType(chosenPotion);
+                    dropStack.setItemMeta(dpm);
                 }
 
                 Item dropped = player.getWorld().dropItemNaturally(dropLoc, dropStack);
