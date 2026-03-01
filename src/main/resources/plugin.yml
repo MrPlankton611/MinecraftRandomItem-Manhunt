@@ -6,22 +6,27 @@ commands:
   manhunt:
     description: Start the custom McManhunt mode
     permission: mcmanhunt.admin
+    permission-message: "§cYou must be an operator to use this command."
   randomitem:
     description: Start or stop random item drops for all players
     usage: /randomitem [stop]
     permission: mcmanhunt.admin
+    permission-message: "§cYou must be an operator to use this command."
   randomitemtimer:
     description: Change the interval for random item drops
     usage: /randomitemtimer <seconds>
     permission: mcmanhunt.admin
+    permission-message: "§cYou must be an operator to use this command."
   mhdebug:
     description: Show debug info (world, coords, gamemode)
     usage: /mhdebug
     permission: mcmanhunt.admin
+    permission-message: "§cYou must be an operator to use this command."
   track:
     description: Track a player with compass + bossbar
     usage: /track <player|stop>
     permission: mcmanhunt.admin
+    permission-message: "§cYou must be an operator to use this command."
   boostitem:
     description: Boost an item's probability by 5%
     usage: /boostitem <MATERIAL>
