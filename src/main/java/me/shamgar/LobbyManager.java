@@ -278,28 +278,17 @@ public class LobbyManager implements Listener {
     @EventHandler
     public void onBlockExplode(org.bukkit.event.block.BlockExplodeEvent event) {
         if (gameRunning) {
-            // Allow explosion physics (knockback) to still apply, but prevent blocks from dropping and stop block changes
-            try {
-                event.blockList().clear();
-                // keep the event not cancelled so entities still get velocity/knockback
-            } catch (Throwable ignored) {
-                // fallback to cancelling if something unexpected happens
-                event.setCancelled(true);
-            }
+            // Allow explosions to destroy blocks normally, but prevent item drops
+            event.setYield(0.0f);
         }
     }
 
     @EventHandler
     public void onEntityExplode(org.bukkit.event.entity.EntityExplodeEvent event) {
         if (gameRunning) {
-            // Allow explosion to apply velocities (so wind/knockback effects still launch players)
-            // but prevent the explosion from modifying blocks or dropping items
-            try {
-                event.blockList().clear();
-                event.setYield(0.0f);
-            } catch (Throwable ignored) {
-                event.setCancelled(true);
-            }
+            // Allow explosions (TNT, creepers, etc.) to destroy blocks normally,
+            // but prevent item drops from the explosion
+            event.setYield(0.0f);
         }
     }
 
