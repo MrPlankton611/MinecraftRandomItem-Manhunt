@@ -21,10 +21,6 @@ public class TrackCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.isOp()) {
-            sender.sendMessage("§cYou must be an operator to use this command.");
-            return true;
-        }
 
         if (!(sender instanceof Player player)) {
             sender.sendMessage("§cOnly players can use this command.");

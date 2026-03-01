@@ -25,8 +25,6 @@ commands:
   track:
     description: Track a player with compass + bossbar
     usage: /track <player|stop>
-    permission: mcmanhunt.admin
-    permission-message: "§cYou must be an operator to use this command."
   boostitem:
     description: Boost an item's probability by 5%
     usage: /boostitem <MATERIAL>
