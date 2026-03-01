@@ -50,6 +50,11 @@ public class RandomItemCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
+        if (!sender.isOp()) {
+            sender.sendMessage("§cYou must be an operator to use this command.");
+            return true;
+        }
+
         if (args.length > 0 && args[0].equalsIgnoreCase("stop")) {
             if (!running) {
                 sender.sendMessage("§cRandom items are not currently running.");

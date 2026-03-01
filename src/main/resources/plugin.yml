@@ -5,18 +5,29 @@ api-version: '1.21'
 commands:
   manhunt:
     description: Start the custom McManhunt mode
+    permission: mcmanhunt.admin
   randomitem:
     description: Start or stop random item drops for all players
     usage: /randomitem [stop]
+    permission: mcmanhunt.admin
   randomitemtimer:
     description: Change the interval for random item drops
     usage: /randomitemtimer <seconds>
+    permission: mcmanhunt.admin
   mhdebug:
     description: Show debug info (world, coords, gamemode)
     usage: /mhdebug
+    permission: mcmanhunt.admin
   track:
     description: Track a player with compass + bossbar
     usage: /track <player|stop>
+    permission: mcmanhunt.admin
   boostitem:
     description: Boost an item's probability by 5%
     usage: /boostitem <MATERIAL>
+
+permissions:
+  mcmanhunt.admin:
+    description: Allows access to McManhunt admin commands
+    default: op
+
