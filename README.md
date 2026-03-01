@@ -1,4 +1,4 @@
-# 🎯 McManhunt+ — Minecraft Random Item Manhunt Plugin
+# 🎯 McManhunt+ — Minecraft Random Item Manhunt Plugin (Vibecoded for fun)
 
 A Paper/Spigot plugin for Minecraft 1.21+ that runs a **Random Item Manhunt** game mode. Players are teleported to a random pregenerated world and receive random items on a timer — last player standing wins!
 
